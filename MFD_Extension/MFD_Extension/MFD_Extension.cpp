@@ -52,21 +52,11 @@ int createADCPacket(SimDataPacket& packet)
 	packet.sim_data_points[i].id = custom_htoni(PLUGIN_VERSION_ID);
 	packet.sim_data_points[i].value = custom_htonf((float) PLUGIN_VERSION_NUMBER);
 	i++;
-	packet.sim_data_points[i].id = custom_htoni(SIM_COCKPIT_ELECTRICAL_BATTERY_ON);
-	packet.sim_data_points[i].value = custom_htonf(1.0f);
-	i++;
-	packet.sim_data_points[i].id = custom_htoni(SIM_COCKPIT_ELECTRICAL_AVIONICS_ON);
-	packet.sim_data_points[i].value = custom_htonf(1.0f);
-	i++;
 	mtx_.lock();
 	for(size_t j = 0;j<data_points.size();j++)
 	{
 		packet.sim_data_points[i].id = custom_htoni(data_points[j].id);
-		if(SIM_TIME_ZULU_TIME_SEC == data_points[j].id)
-		{
-			float time = int(data_points[j].value);
-			data_points[j].value =(time * 60 * 60)+ ( (data_points[j].value - time ) * 60 * 60);
-		}
+		
 		packet.sim_data_points[i].value = custom_htonf(data_points[j].value);
 		i++;
 	}
