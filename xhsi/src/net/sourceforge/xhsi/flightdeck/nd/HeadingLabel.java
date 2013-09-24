@@ -31,6 +31,8 @@ import java.text.DecimalFormat;
 
 
 import net.sourceforge.xhsi.XHSIPreferences;
+import net.sourceforge.xhsi.flightdeck.DrawUtils;
+import net.sourceforge.xhsi.flightdeck.GraphicsConfig;
 //import net.sourceforge.xhsi.XHSISettings;
 
 import net.sourceforge.xhsi.model.Avionics;
@@ -60,7 +62,7 @@ public class HeadingLabel extends NDSubcomponent {
         if ( nd_gc.powered && ! nd_gc.mode_plan ) {
 
             // int y = nd_gc.border_top + nd_gc.line_height_large;
-            int heading_box_bottom_y = nd_gc.border_top + nd_gc.line_height_large;
+            //int heading_box_bottom_y = nd_gc.border_top + nd_gc.line_height_large;
             int rose_top_y = this.nd_gc.map_center_y - nd_gc.rose_radius;
             int center_x = this.nd_gc.map_center_x;
             int center_y = this.nd_gc.map_center_y;
@@ -109,9 +111,7 @@ public class HeadingLabel extends NDSubcomponent {
     //            null);
 
             //int width = 200;
-            int x_points_heading_box[] = { nd_gc.map_center_x-36, nd_gc.map_center_x-36, nd_gc.map_center_x+36, nd_gc.map_center_x+36 };
-            int y_points_heading_box[] = { nd_gc.border_top+0, nd_gc.border_top+30, nd_gc.border_top+30, nd_gc.border_top+0 };
-
+            
             // TRK and MAG labels
             g2.setColor(nd_gc.heading_labels_color);
             g2.setFont(nd_gc.font_medium);
@@ -127,14 +127,12 @@ public class HeadingLabel extends NDSubcomponent {
             }
 
             // surrounding box and value
+            
             g2.setColor(nd_gc.top_text_color);
-            g2.drawPolyline(x_points_heading_box, y_points_heading_box, 4);
-            g2.clearRect(center_x - 34, nd_gc.border_top, 68, heading_box_bottom_y - nd_gc.border_top);
             g2.setFont(nd_gc.font_large);
             DecimalFormat degrees_formatter = new DecimalFormat("000");
             String text = degrees_formatter.format( mag_value );
-            g2.drawString(text , center_x - 3*nd_gc.digit_width_large/2, heading_box_bottom_y - 3);
-
+            DrawUtils.drawBoxedText(g2,(GraphicsConfig)nd_gc, text, nd_gc.map_center_x,nd_gc.border_top,nd_gc.line_height_large,nd_gc.digit_width_large,nd_gc.font_large);
             // current heading pointer
             if ( ! nd_gc.mode_classic_hsi ) {
                 int hdg_pointer_height = (int) Math.min(16,18 * nd_gc.shrink_scaling_factor);

@@ -114,7 +114,7 @@ public class XPlaneDataPacketDecoder implements XPlaneDataPacketObserver {
 
         // identify the packet type (identified by the first four bytes)
         String packet_type = new String(sim_data, 0, 4).trim();
-
+		
         if ( packet_type.equals("ADCD")
                 || packet_type.equals("AVIO")
                 || packet_type.equals("ENGI")
@@ -130,14 +130,15 @@ public class XPlaneDataPacketDecoder implements XPlaneDataPacketObserver {
             data_stream.skipBytes(4);    // skip the bytes containing the packet type id
             int nb_of_data_points = data_stream.readInt();
 
-            for (int i=0; i<nb_of_data_points; i++) {
+            for (int i=0; i<nb_of_data_points; i++) 
+            {
                 data_point_id = data_stream.readInt();
                 if ( data_point_id >= 10000 ) {
                     // a string of 4 bytes
                     string_data = new String(sim_data, 8+(i*8)+4, 4).trim();
                     data_stream.skipBytes(4);
                     this.xplane_data_repository.store_sim_string(data_point_id, string_data);
-//                } else if ( data_point_id >= 5000 ) {
+//              } else if ( data_point_id >= 5000 ) {
 //                    // Int
 //                    int_data = data_stream.readInt();
 //                    //logger.warning("INT:"+data_point_id+"="+int_data);

@@ -73,6 +73,7 @@ import net.sourceforge.xhsi.flightdeck.eicas.EICASComponent;
 import net.sourceforge.xhsi.flightdeck.empty.EmptyComponent;
 import net.sourceforge.xhsi.flightdeck.nd.NDComponent;
 import net.sourceforge.xhsi.flightdeck.pfd.PFDComponent;
+import net.sourceforge.xhsi.flightdeck.uh60m.UH60MComponent;
 
 import net.sourceforge.xhsi.util.XHSILogFormatter;
 
@@ -360,6 +361,15 @@ public class XHSI implements ActionListener {
                     this.preferences.add_subsciption(clock_ui, XHSIPreferences.PREF_DU_PREPEND);
                     this.preferences.add_subsciption(clock_ui, XHSIPreferences.PREF_USE_POWER);
                     break;
+                case XHSIInstrument.UH60M_ID :
+                    // UH60M
+                    UH60MComponent uh60_ui = (UH60MComponent)instruments.get(i).components;
+                    this.preferences.add_subsciption(uh60_ui, XHSIPreferences.PREF_BOLD_FONTS);
+                    this.preferences.add_subsciption(uh60_ui, XHSIPreferences.PREF_USE_MORE_COLOR);
+                    this.preferences.add_subsciption(uh60_ui, XHSIPreferences.PREF_ANTI_ALIAS);
+                    this.preferences.add_subsciption(uh60_ui, XHSIPreferences.PREF_DU_PREPEND);
+                    this.preferences.add_subsciption(uh60_ui, XHSIPreferences.PREF_USE_POWER);
+                    break;
             }
         }
 
@@ -555,6 +565,11 @@ public class XHSI implements ActionListener {
                     model_instance.get_repository_instance().add_observer( (ClockComponent)instrument_window.components );
                     min_size = true;
                     break;
+                case XHSIInstrument.UH60M_ID :
+                    instrument_window.components = new UH60MComponent(model_instance, du_num);
+                    model_instance.get_repository_instance().add_observer( (UH60MComponent)instrument_window.components );
+                    min_size = true;
+                    break;
             }
 
             if ( instrument_window.components != null ) {
@@ -628,6 +643,10 @@ public class XHSI implements ActionListener {
                 case XHSIInstrument.ANNUN_ID :
                     ((AnnunComponent)window.components).forceReconfig();
                     break;
+                case XHSIInstrument.UH60M_ID :
+                    ((UH60MComponent)window.components).forceReconfig();
+                    break;
+                    
             }
     //        window.frame.setVisible(display);
             //this.pilot_nd_frame.setIgnoreRepaint(true);

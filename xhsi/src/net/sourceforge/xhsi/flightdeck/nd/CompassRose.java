@@ -112,7 +112,8 @@ public class CompassRose extends NDSubcomponent {
                 Graphics g = (Graphics) g2;
                 int tick_length = 0;
                 g2.setFont(nd_gc.font_medium);
-                for (int angle = min_visible_heading; angle <= max_visible_heading; angle += 5) {
+                for (int angle = min_visible_heading; angle <= max_visible_heading; angle += 5) 
+                {
                     if (angle % 10 == 0) {
                         tick_length = nd_gc.big_tick_length;
                     } else {
@@ -150,7 +151,7 @@ public class CompassRose extends NDSubcomponent {
                 }
                 g2.setTransform(original_at);
 
-                if ( nd_gc.mode_centered ) {
+                if (! nd_gc.mode_centered ) {
                     // 45 degrees marks for APP CTR, VOR CTR and MAP CTR
                     int mark_length = nd_gc.big_tick_length;
                     g2.drawLine(nd_gc.map_center_x, nd_gc.map_center_y - nd_gc.rose_radius - mark_length, nd_gc.map_center_x, nd_gc.map_center_y - nd_gc.rose_radius);

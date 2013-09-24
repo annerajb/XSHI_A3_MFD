@@ -68,7 +68,10 @@ public interface Aircraft {
      * @return float - true air speed in knots
      */
     public float true_air_speed();
-
+    /**
+     * @return float - true air speed in km
+     */
+    public float true_air_speed_km();
     /**
      * @return float - magnetic heading of the aircraft in degrees
      */

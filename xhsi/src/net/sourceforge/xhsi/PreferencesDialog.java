@@ -54,6 +54,7 @@ import net.sourceforge.xhsi.flightdeck.eicas.EICASComponent;
 import net.sourceforge.xhsi.flightdeck.mfd.MFDComponent;
 import net.sourceforge.xhsi.flightdeck.annunciators.AnnunComponent;
 import net.sourceforge.xhsi.flightdeck.clock.ClockComponent;
+import net.sourceforge.xhsi.flightdeck.uh60m.UH60MComponent;
 
 
 public class PreferencesDialog extends JDialog implements ActionListener {
@@ -75,7 +76,7 @@ public class PreferencesDialog extends JDialog implements ActionListener {
     private JCheckBox panel_locked_checkbox;
     private JButton get_button;
 
-    private static final int MAX_WINS = 7; // Empty, PFD, ND, EICAS, MFD, Annunciators and Clock
+    private static final int MAX_WINS = 8; // Empty, PFD, ND, EICAS, MFD, Annunciators and Clock
     private JCheckBox panel_active_checkbox[] = new JCheckBox[MAX_WINS];
     private JTextField panel_pos_x_textfield[] = new JTextField[MAX_WINS];
     private JTextField panel_pos_y_textfield[] = new JTextField[MAX_WINS];
@@ -1546,11 +1547,15 @@ public class PreferencesDialog extends JDialog implements ActionListener {
                     case XHSIInstrument.MFD_ID :
                         ((MFDComponent)du.components).forceReconfig();
                         break;
+                        
                     case XHSIInstrument.ANNUN_ID :
                         ((AnnunComponent)du.components).forceReconfig();
                         break;
                     case XHSIInstrument.CLOCK_ID :
                         ((ClockComponent)du.components).forceReconfig();
+                        break;
+                    case XHSIInstrument.UH60M_ID :
+                        ((UH60MComponent)du.components).forceReconfig();
                         break;
                 }
             }

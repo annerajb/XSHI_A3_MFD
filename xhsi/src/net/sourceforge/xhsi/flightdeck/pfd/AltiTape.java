@@ -40,6 +40,8 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 
 import java.util.logging.Logger;
+import net.sourceforge.xhsi.flightdeck.DrawUtils;
+import net.sourceforge.xhsi.flightdeck.GraphicsConfig;
 
 //import net.sourceforge.xhsi.XHSISettings;
 
@@ -339,144 +341,13 @@ public class AltiTape extends PFDSubcomponent {
         g2.drawPolygon(box_x, box_y, 7);
 
         g2.clipRect(pfd_gc.altitape_left, pfd_gc.adi_cy - pfd_gc.line_height_xxl, pfd_gc.tape_width*2, 2 * pfd_gc.line_height_xxl);
-
+        int x10k = pfd_gc.altitape_left + pfd_gc.tape_width*1/8 + pfd_gc.tape_width*3/16 + 4;
         if ( alt >= 0.0f ) {
-
-//            int alt_int = alt.intValue();
-            int alt_int = (int)alt;
-            int alt_20 = alt_int / 20 * 20;
-            float alt_frac = (alt - (float)alt_20) / 20.0f;
-            int alt_100 = (alt_int / 100) % 10;
-            int alt_1k = (alt_int / 1000) % 10;
-            int alt_10k = (alt_int / 10000) % 10;
-
-            int x10k = pfd_gc.altitape_left + pfd_gc.tape_width*1/8 + pfd_gc.tape_width*3/16 + 4;
-            int x1k = x10k + pfd_gc.digit_width_xxl;
-            int x100 = x1k + pfd_gc.digit_width_xxl;
-            int x20 = x100 + pfd_gc.digit_width_l;
-            int ydelta = Math.round( pfd_gc.line_height_l*alt_frac );
-
-            DecimalFormat decaform = new DecimalFormat("00");
-            g2.setFont(pfd_gc.font_l);
-            g2.drawString(decaform.format( (alt_20 + 40) % 100 ), x20, pfd_gc.adi_cy + pfd_gc.line_height_l/2 - 2 + ydelta - pfd_gc.line_height_l*2);
-            g2.drawString(decaform.format( (alt_20 + 20) % 100 ), x20, pfd_gc.adi_cy + pfd_gc.line_height_l/2 - 2 + ydelta - pfd_gc.line_height_l);
-            g2.drawString(decaform.format( alt_20 % 100 ), x20, pfd_gc.adi_cy + pfd_gc.line_height_l/2 - 2 + ydelta);
-            if (alt_20 == 0) {
-                g2.drawString(decaform.format( (alt_20 + 20) % 100 ), x20, pfd_gc.adi_cy + pfd_gc.line_height_l/2 - 2 + ydelta + pfd_gc.line_height_l);
-            } else {
-                g2.drawString(decaform.format( (alt_20 - 20) % 100 ), x20, pfd_gc.adi_cy + pfd_gc.line_height_l/2 - 2 + ydelta + pfd_gc.line_height_l);
-            }
-
-            alt_20 %= 100;
-
-            // hundreds
-            g2.setFont(pfd_gc.font_l);
-            if ( alt_20 == 80 ) {
-                ydelta = Math.round( pfd_gc.line_height_l*alt_frac );
-                g2.drawString("" + alt_100, x100, pfd_gc.adi_cy + pfd_gc.line_height_l/2 - 3 + ydelta);
-                g2.drawString("" + (alt_100 + 1) % 10, x100, pfd_gc.adi_cy + pfd_gc.line_height_l/2 - 3 + ydelta - pfd_gc.line_height_l);
-            } else {
-                g2.drawString("" + alt_100, x100, pfd_gc.adi_cy + pfd_gc.line_height_l/2 - 3);
-            }
-
-            // thousands
-            g2.setFont(pfd_gc.font_xxl);
-            if ( ( alt_100 == 9 ) && ( alt_20 == 80 ) ) {
-                ydelta = Math.round( pfd_gc.line_height_xxl*alt_frac );
-                g2.drawString("" + alt_1k, x1k, pfd_gc.adi_cy + pfd_gc.line_height_xxl/2 - 4 + ydelta);
-                g2.drawString("" + (alt_1k + 1) % 10, x1k, pfd_gc.adi_cy + pfd_gc.line_height_xxl/2 - 4 + ydelta - pfd_gc.line_height_xxl);
-            } else {
-                g2.drawString("" + alt_1k, x1k, pfd_gc.adi_cy + pfd_gc.line_height_xxl/2 - 4);
-            }
-
-            // ten-thousands
-            if ( ( alt_1k == 9 ) && ( alt_100 == 9 ) && ( alt_20 == 80 ) ) {
-                // already done: ydelta = Math.round( pfd_gc.line_height_xxl*alt_frac );
-                if ( alt_10k == 0) {
-                    g2.setColor(pfd_gc.heading_labels_color.darker());
-                    g2.fillRoundRect(x10k + pfd_gc.digit_width_xxl/8, pfd_gc.adi_cy + pfd_gc.line_height_xxl/2 - pfd_gc.line_height_xxl*3/4 - 4 + ydelta, pfd_gc.digit_width_xxl*3/4, pfd_gc.line_height_xxl*3/4, (int)(8.0f*pfd_gc.scaling_factor), (int)(8.0f*pfd_gc.scaling_factor));
-                    g2.setColor(pfd_gc.markings_color);
-                } else {
-                    g2.drawString("" + alt_10k, x10k, pfd_gc.adi_cy + pfd_gc.line_height_xxl/2 - 4 + ydelta);
-                }
-                g2.drawString("" + (alt_10k + 1) % 10, x10k, pfd_gc.adi_cy + pfd_gc.line_height_xxl/2 - 4 + ydelta - pfd_gc.line_height_xxl);
-            } else {
-                if ( alt_10k == 0) {
-                    g2.setColor(pfd_gc.heading_labels_color.darker());
-                    g2.fillRoundRect(x10k + pfd_gc.digit_width_xxl/8, pfd_gc.adi_cy + pfd_gc.line_height_xxl/2 - pfd_gc.line_height_xxl*3/4 - 4, pfd_gc.digit_width_xxl*3/4, pfd_gc.line_height_xxl*3/4, (int)(8.0f*pfd_gc.scaling_factor), (int)(8.0f*pfd_gc.scaling_factor));
-                    g2.setColor(pfd_gc.markings_color);
-                } else {
-                    g2.drawString("" + alt_10k, x10k, pfd_gc.adi_cy + pfd_gc.line_height_xxl/2 - 4);
-                }
-            }
-
+            
+            DrawUtils.drawAltReadOut(g2,(GraphicsConfig)pfd_gc,(int) alt, x10k, pfd_gc.adi_cy,true);
         } else {
-
-            // the same for negative altitudes, except that the vertical positions have to be reversed
-
-//            int alt_int = -alt.intValue();
-            int alt_int = - (int)alt;
-            int alt_20 = alt_int / 20 * 20;
-            float alt_frac = (-alt - (float)alt_20) / 20.0f;
-            int alt_100 = (alt_int / 100) % 10;
-            int alt_1k = (alt_int / 1000) % 10;
-            int alt_10k = (alt_int / 10000) % 10;
-
-            int x10k = pfd_gc.altitape_left + pfd_gc.tape_width*1/8 + pfd_gc.tape_width*3/16 + 4;
-            int x1k = x10k + pfd_gc.digit_width_xxl;
-            int x100 = x1k + pfd_gc.digit_width_xxl;
-            int x20 = x100 + pfd_gc.digit_width_xl;
-            int ydelta = Math.round( pfd_gc.line_height_l*alt_frac );
-
-            DecimalFormat decaform = new DecimalFormat("00");
-            g2.setFont(pfd_gc.font_l);
-            g2.drawString(decaform.format( (alt_20 + 40) % 100 ), x20, pfd_gc.adi_cy + pfd_gc.line_height_l/2 - 2 - ydelta + pfd_gc.line_height_l*2);
-            g2.drawString(decaform.format( (alt_20 + 20) % 100 ), x20, pfd_gc.adi_cy + pfd_gc.line_height_l/2 - 2 - ydelta + pfd_gc.line_height_l);
-            g2.drawString(decaform.format( alt_20 % 100 ), x20, pfd_gc.adi_cy + pfd_gc.line_height_l/2 - 2 - ydelta);
-            if (alt_20 == 0) {
-                g2.drawString(decaform.format( (alt_20 + 20) % 100 ), x20, pfd_gc.adi_cy + pfd_gc.line_height_l/2 - 2 - ydelta - pfd_gc.line_height_l);
-            } else {
-                g2.drawString(decaform.format( (alt_20 - 20) % 100 ), x20, pfd_gc.adi_cy + pfd_gc.line_height_l/2 - 2 - ydelta - pfd_gc.line_height_l);
-            }
-
-            alt_20 %= 100;
-
-            g2.setFont(pfd_gc.font_xl);
-            if ( alt_20 == 80 ) {
-                ydelta = Math.round( pfd_gc.line_height_xl*alt_frac );
-                g2.drawString("" + alt_100, x100, pfd_gc.adi_cy + pfd_gc.line_height_xl/2 - 3 - ydelta);
-                g2.drawString("" + (alt_100 + 1) % 10, x100, pfd_gc.adi_cy + pfd_gc.line_height_xl/2 - 3 - ydelta + pfd_gc.line_height_xl);
-            } else {
-                g2.drawString("" + alt_100, x100, pfd_gc.adi_cy + pfd_gc.line_height_xl/2 - 3);
-            }
-
-            g2.setFont(pfd_gc.font_xxl);
-            if ( ( alt_100 == 9 ) && ( alt_20 == 80 ) ) {
-                ydelta = Math.round( pfd_gc.line_height_xxl*alt_frac );
-                g2.drawString("" + alt_1k, x1k, pfd_gc.adi_cy + pfd_gc.line_height_xxl/2 - 4 - ydelta);
-                g2.drawString("" + (alt_1k + 1) % 10, x1k, pfd_gc.adi_cy + pfd_gc.line_height_xxl/2 - 4 - ydelta + pfd_gc.line_height_xxl);
-            } else {
-                g2.drawString("" + alt_1k, x1k, pfd_gc.adi_cy + pfd_gc.line_height_xxl/2 - 4);
-            }
-
-            if ( ( alt_1k == 9 ) && ( alt_100 == 9 ) && ( alt_20 == 80 ) ) {
-                // already done: ydelta = Math.round( pfd_gc.line_height_xxl*alt_frac );
-                if ( alt_10k == 0) {
-                    g2.setColor(pfd_gc.heading_labels_color);
-                    g2.drawString("\u25CF", x10k, pfd_gc.adi_cy + pfd_gc.line_height_xxl/2 - 4 - ydelta);
-                    g2.setColor(pfd_gc.markings_color);
-                } else {
-                    g2.drawString("" + alt_10k, x10k, pfd_gc.adi_cy + pfd_gc.line_height_xxl/2 - 4 - ydelta);
-                }
-                g2.drawString("" + (alt_10k + 1) % 10, x10k, pfd_gc.adi_cy + pfd_gc.line_height_xxl/2 - 4 - ydelta + pfd_gc.line_height_xxl);
-            } else {
-                if ( alt_10k == 0) {
-                    g2.drawString("-", x10k, pfd_gc.adi_cy + pfd_gc.line_height_xxl/2 - 4);
-                } else {
-                    g2.drawString("" + alt_10k, x10k, pfd_gc.adi_cy + pfd_gc.line_height_xxl/2 - 4);
-                }
-            }
-
+            DrawUtils.drawAltReadOut(g2,(GraphicsConfig)pfd_gc,(int) -alt, x10k, pfd_gc.adi_cy,true);
+           
         }
 
         g2.setClip(original_clipshape);

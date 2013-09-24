@@ -36,8 +36,9 @@ public class XHSIInstrument {
         EICAS (EICAS_ID, "EICAS", 320, 320),
         MFD (MFD_ID, "MFD", 320, 320),
         Annunciators (ANNUN_ID, "Annunciators", 160, 160),
-        Clock (CLOCK_ID, "Clock", 160, 160);
-
+        Clock (CLOCK_ID, "Clock", 160, 160),
+        UH60M (UH60M_ID, "UH60M", 160, 160);
+        
         private boolean active;
         private final int id;
         private final String name;
@@ -92,7 +93,7 @@ public class XHSIInstrument {
     public static final int MFD_ID = 4;
     public static final int ANNUN_ID = 5;
     public static final int CLOCK_ID = 6;
-
+    public static final int UH60M_ID = 7;
 
     public XHSIInstrument(DU du) {
 

@@ -23,14 +23,10 @@
 */
 package net.sourceforge.xhsi.flightdeck.nd;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.geom.AffineTransform;
-import java.awt.geom.GeneralPath;
-import java.awt.geom.Line2D;
 import java.text.DecimalFormat;
+import net.sourceforge.xhsi.flightdeck.DrawUtils;
 
-import net.sourceforge.xhsi.model.Avionics;
 import net.sourceforge.xhsi.model.ModelFactory;
 
 //import net.sourceforge.xhsi.panel.GraphicsConfig;
@@ -137,39 +133,10 @@ public class SpeedsLabel extends NDSubcomponent {
             );
 
         // wind direction arrow
-        if (wind_speed > 4) {
-//if (true) {
-            
-            AffineTransform original_at = null;
-            original_at = g2.getTransform();
-            AffineTransform rotate = AffineTransform.getRotateInstance(
-                    Math.toRadians((double) (wind_direction - map_up + this.aircraft.magnetic_variation())),
-                    wind_dir_arrow_x,
-                    wind_dir_arrow_y);
-            g2.transform(rotate);
-
-            GeneralPath polyline;
-//            g2.draw(new Line2D.Double(wind_dir_arrow_x, wind_dir_arrow_y - (wind_dir_arrow_length/2),
-//                                                               wind_dir_arrow_x, wind_dir_arrow_y + (wind_dir_arrow_length/2)));
-//            polyline = new GeneralPath(GeneralPath.WIND_EVEN_ODD, 2);
-//            polyline.moveTo (wind_dir_arrow_x - 5, wind_dir_arrow_y + (wind_dir_arrow_length/2) - 5);
-//            polyline.lineTo(wind_dir_arrow_x, wind_dir_arrow_y + (wind_dir_arrow_length/2));
-//            polyline.lineTo(wind_dir_arrow_x + 5, wind_dir_arrow_y + (wind_dir_arrow_length/2) - 5);
-            polyline = new GeneralPath(GeneralPath.WIND_NON_ZERO, 2);
-            polyline.moveTo (wind_dir_arrow_x, wind_dir_arrow_y - (wind_dir_arrow_length/2));
-            polyline.lineTo(wind_dir_arrow_x, wind_dir_arrow_y + (wind_dir_arrow_length/2));
-            polyline.lineTo(wind_dir_arrow_x + 5, wind_dir_arrow_y + (wind_dir_arrow_length/2) - 5);
-            g2.draw(polyline);
-            polyline = new GeneralPath(GeneralPath.WIND_NON_ZERO, 2);
-            polyline.moveTo (wind_dir_arrow_x, wind_dir_arrow_y - (wind_dir_arrow_length/2));
-            polyline.lineTo(wind_dir_arrow_x, wind_dir_arrow_y + (wind_dir_arrow_length/2));
-            polyline.lineTo(wind_dir_arrow_x - 5, wind_dir_arrow_y + (wind_dir_arrow_length/2) - 5);
-            g2.draw(polyline);
-            g2.setTransform(original_at);
-
+        if (wind_speed > 4) 
+        {
+            DrawUtils.drawArrow(g2,wind_dir_arrow_x,wind_dir_arrow_y,wind_dir_arrow_length,(double) (wind_direction - map_up + this.aircraft.magnetic_variation()));
         }
 
     }
-
-
 }

@@ -83,6 +83,7 @@ public class XPlaneAircraft implements Aircraft {
     public float agl_m() { return (sim_data.get_sim_float(XPlaneSimDataRepository.SIM_FLIGHTMODEL_POSITION_Y_AGL)); } // meters
     public float ground_speed() { return (sim_data.get_sim_float(XPlaneSimDataRepository.SIM_FLIGHTMODEL_POSITION_GROUNDSPEED) * 1.9438445f); } // m/s to knots
     public float true_air_speed() { return (sim_data.get_sim_float(XPlaneSimDataRepository.SIM_FLIGHTMODEL_POSITION_TRUE_AIRSPEED) * 1.94385f); } // m/s to knots
+    public float true_air_speed_km() { return sim_data.get_sim_float(XPlaneSimDataRepository.SIM_FLIGHTMODEL_POSITION_TRUE_AIRSPEED) ; } // m/s to knots
     public float heading() { return sim_data.get_sim_float(XPlaneSimDataRepository.SIM_FLIGHTMODEL_POSITION_MAGPSI); } // degrees magnetic
     public float hpath() { return sim_data.get_sim_float(XPlaneSimDataRepository.SIM_FLIGHTMODEL_POSITION_HPATH); }
 //    public float indicated_altitude() { return sim_data.get_sim_float(XPlaneSimDataRepository.SIM_FLIGHTMODEL_MISC_H_IND); }
@@ -229,6 +230,7 @@ public class XPlaneAircraft implements Aircraft {
 
     
     public float sim_time_zulu() {
+        
         return sim_data.get_sim_float(XPlaneSimDataRepository.SIM_TIME_ZULU_TIME_SEC);
     }
 
