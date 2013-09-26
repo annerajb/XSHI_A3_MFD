@@ -11,8 +11,28 @@
 *.lai
 *.la
 *.a
-
+*.idb
+*.user
+*.manifest
+*.lck
+*.log
+*.dll
 *.class
+*.exe
+*.pdb
+*.filters
+*.ipch
+*.res
+*.lastbuildstate
+*.rc
+*.sdf
+*.suo
+*.ilk
+*.exp
+*.obj
+*.tlog
+*.pch
+*.lib
 
 # Package Files #
 *.jar
