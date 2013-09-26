@@ -9,6 +9,8 @@
 #include <boost/algorithm/string.hpp>
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/lexical_cast.hpp>
+#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/xml_parser.hpp>
 #include "endinaness.h"
 #include "ids.h"
 #define PLUGIN_VERSION_NUMBER 20005
@@ -67,7 +69,20 @@ int createADCPacket(SimDataPacket& packet)
 }
 void workerFunc()  
 {  
-	
+	using boost::property_tree::ptree;
+    ptree pt;
+
+    // Load the XML file into the property tree. If reading fails
+    // (cannot open file, parse error), an exception is thrown.
+    read_xml("config.xml", pt);
+
+    // Get the filename and store it in the m_file variable.
+    // Note that we construct the path to the value by separating
+    // the individual keys with dots. If dots appear in the keys,
+    // a path type with a different separator can be used.
+    // If the debug.filename key is not found, an exception is thrown.
+    std::string ip = pt.get<std::string>("config.ip","127.0.0.1");
+	std::string port = pt.get<std::string>("config.port","49020");
 	do 
 	{
 		try
@@ -76,7 +91,7 @@ void workerFunc()
 			boost::asio::io_service io_service;
 
 			udp::resolver resolver(io_service);
-			udp::resolver::query query(udp::v4(),"127.0.0.1", "49020");
+			udp::resolver::query query(udp::v4(),ip, port);
 			udp::endpoint receiver_endpoint = *resolver.resolve(query);
 
 			udp::socket socket(io_service);
