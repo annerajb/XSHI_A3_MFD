@@ -43,7 +43,7 @@ public class DrawUtils
         g2.setFont(fn);
         g2.setColor(temp);
     }
-    public static void drawUHCompassRose(Graphics2D g2 , UH60MGraphicsConfig nd_gc,int x, int y, float map_up)
+    public static void drawUHCompassRose(Graphics2D g2 , UH60MGraphicsConfig nd_gc,int x, int y, int diameter ,float map_up)
     {
         int big_tick_length = (int) (15 * nd_gc.shrink_scaling_factor);
         int small_tick_length = big_tick_length / 3;
@@ -56,7 +56,7 @@ public class DrawUtils
         float aircraft_track = map_up;
         int min_visible_heading = round_to_ten(aircraft_track - half_view_angle);
         int max_visible_heading = round_to_ten(aircraft_track + half_view_angle) + 5;
-        int rose_y_offset = 275 + 4 + nd_gc.border_top;
+        int rose_y_offset = diameter + 4 + nd_gc.border_top;
 
         double rotation_offset = (-1 * half_view_angle)  + (min_visible_heading - (map_up - half_view_angle));
 
