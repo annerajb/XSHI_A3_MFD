@@ -5,17 +5,32 @@
 #include <windows.h>
 #include <iomanip>
 #include <iostream>
+void getExtendedError()
+{
+	DWORD lastError = GetLastError();
+	wchar_t buf[256];
+	FormatMessageW(FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
+		NULL, lastError, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+		buf, (sizeof(buf) / sizeof(wchar_t)), NULL);
+	std::wcout << "Win32FunctionFailurek GetLastError returned: " << buf  << std::endl;
+}
 int _tmain(int argc, _TCHAR* argv[])
 {
   /* get handle to dll */ 
-   HINSTANCE hGetProcIDDLL = LoadLibrary("E:\\SteamLibrary\\SteamApps\\common\\Arma 3\\@MFD\\MFD_Extension.dll"); 
+   HINSTANCE hGetProcIDDLL = LoadLibrary(TEXT("MFD_Extension.dll")); 
 
    /* get pointer to the function in the dll*/ 
-   FARPROC lpfnGetProcessID = GetProcAddress(HMODULE (hGetProcIDDLL),"_RVExtension@12"); 
+   if (hGetProcIDDLL == NULL)
+   {
+	   getExtendedError();
+	   std::cout << "failure to open dll" << std::endl;
+	   return 1;
+   }
+   FARPROC lpfnGetProcessID = GetProcAddress(HMODULE (hGetProcIDDLL),"RVExtension"); 
    if(lpfnGetProcessID == NULL)
    {
-		DWORD lastError = GetLastError();
-		std::cout << "General failure. GetLastError returned " << std::hex << lastError << ".";
+	   getExtendedError();
+		return 1;
    }
    /* 
       Define the Function in the DLL for reuse. This is just prototyping the dll's function. 

@@ -46,3 +46,4 @@ dist/
 nbdist/
 nbactions.xml
 nb-configuration.xml
+/xhsi/nbproject/private/
